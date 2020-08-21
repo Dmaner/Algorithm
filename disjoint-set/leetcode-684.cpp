@@ -17,8 +17,8 @@ class Union_Find {
     while (r != pre[r]) r = pre[r];
     // compress path
     while (rec != r) {
-      int p = pre[x];
-      pre[x] = r;
+      int p = pre[rec];
+      pre[rec] = r;
       rec = p;
     }
     return r;
