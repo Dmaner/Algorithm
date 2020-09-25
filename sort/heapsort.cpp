@@ -56,7 +56,7 @@ void heapsort(int* nums, int length){
 int main(int argc, char const *argv[])
 {
     
-    int a[10] = {9,8,7,6,5,4,3,2,1};
+    int a[10] = {10,9,8,7,6,5,4,3,2,1};
     heapsort(a, 10);
     for (int num: a)
     {
