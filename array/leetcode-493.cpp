@@ -1,3 +1,4 @@
+// leetcode 493 link: https://leetcode-cn.com/problems/reverse-pairs/
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -20,11 +21,11 @@ struct FinTree
     }
 
     // 向上更新
-    void updateTree(int i, int count)
+    void updateTree(int i)
     {
         while (i < size)
         {
-            tree[i] += count;
+            tree[i] ++;
             i += lowbit(i);
         }
     }
@@ -40,6 +41,11 @@ struct FinTree
         }
         return res;
     }
+    
+    int get_bucket_id(vector<int> &v, int num) 
+    {
+        return lower_bound(v.begin(), v.end(), ceil(num / 2.)) - v.begin();
+    }
 };
 
 class Solution
@@ -52,7 +58,7 @@ public:
             return 0;
         FinTree ft(size + 1);
 
-        // 离散化 排序去重 用Set也行
+        // 离散化
         vector<int> v(nums);
         sort(v.begin(), v.end());
         v.erase(unique(v.begin(), v.end()), v.end());
@@ -62,9 +68,9 @@ public:
         for (int i = size - 1; i >= 0; --i)
         {
             // 查找num/2
-            count += ft.queryTree(lower_bound(v.begin(), v.end(), ceil(nums[i] / 2.)) - v.begin());
+            count += ft.queryTree(ft.get_bucket_id(v, nums[i]));
             // 更新num
-            ft.updateTree(lower_bound(v.begin(), v.end(), nums[i]) - v.begin() + 1, 1);
+            ft.updateTree(ft.get_bucket_id(v, nums[i]) + 1);
         }
         return count;
     }
