@@ -44,7 +44,7 @@ struct FinTree
     
     int get_bucket_id(vector<int> &v, int num) 
     {
-        return lower_bound(v.begin(), v.end(), ceil(num / 2.)) - v.begin();
+        return lower_bound(v.begin(), v.end(), num) - v.begin();
     }
 };
 
@@ -68,7 +68,7 @@ public:
         for (int i = size - 1; i >= 0; --i)
         {
             // 查找num/2
-            count += ft.queryTree(ft.get_bucket_id(v, nums[i]));
+            count += ft.queryTree(ft.get_bucket_id(v, ceil(nums[i]/2.)));
             // 更新num
             ft.updateTree(ft.get_bucket_id(v, nums[i]) + 1);
         }
