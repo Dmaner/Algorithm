@@ -31,8 +31,4 @@
 - merge-sort
 - quick-sort
 - radix-sort
-# Graph
-- Base structure 
-- Bfs
-- Dfs
 </font>

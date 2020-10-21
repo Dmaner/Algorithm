@@ -7,6 +7,9 @@
   - kruskal
   - prim
 - single source shortest path
+  - dijkstra
+  - bellman-ford
+  - spfa
 - shortest path for all nodes
 - maximum flow
 </font>
