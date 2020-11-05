@@ -1,7 +1,7 @@
 # <font face="Consolas">  Graph
 - [base algorithm](../graph/base)
-  - bfs
-  - dfs
+  - [bfs](../graph/base/DFS)
+  - [dfs](../graph/base/BFS)
   - [topological sort](../graph/base/Topological-sort)
 - [minimum spanning tree](../graph/MST)
   - kruskal
