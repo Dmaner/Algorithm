@@ -10,4 +10,4 @@
 - #### [Math](./math)
 - #### [Divide & Conquer](./divide&conquer)
 - #### [Stack](./stack)
-- #### [Disjoint-set](./disjoint-set)
+- #### [并查集](./disjoint-set)
