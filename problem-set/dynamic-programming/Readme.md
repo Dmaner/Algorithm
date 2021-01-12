@@ -2,7 +2,7 @@
 
 ## 经典例题
 
-[**LeetCode 354.俄罗斯套娃信封问题**](https://leetcode-cn.com/problems/russian-doll-envelopes/)
+[LeetCode 354.俄罗斯套娃信封问题](https://leetcode-cn.com/problems/russian-doll-envelopes/)
 
 - 思路
 
@@ -46,7 +46,7 @@ public:
 };
 ```
 
-[**LeetCode 918 环形子数组的最大和**](https://leetcode-cn.com/problems/maximum-sum-circular-subarray/)
+[LeetCode 918 环形子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-circular-subarray/)
 
 - 题意
 
@@ -82,6 +82,71 @@ public:
         int ans_2 = sum + kadane(A, 0, n-1, -1);
         int ans_3 = sum + kadane(A, 1, n, -1);
         return max(ans_1, max(ans_2, ans_3));
+    }
+};
+```
+
+[LeetCode 873 最长的斐波那契子序列的长度](https://leetcode-cn.com/problems/length-of-longest-fibonacci-subsequence/)
+
+- 思路
+
+难点在于对状态的定义, 对于一个斐波那契子序列, 需要知道两个状态才能判断是不是可以转移
+定义**状态**为`dp[i][j]`表示以`arr[i], arr[j]`结尾最长的斐波那契子序列
+**状态转移方程** :  `dp[i][j] = max(dp[k][i] + 1)`其中`k < i < j`且`arr[i] + arr[k] = arr[j]`
+
+- 代码
+
+```c++
+class Solution {
+public:
+    int lenLongestFibSubseq(vector<int>& arr) {
+        int n = arr.size();
+        unordered_map<int, int> index_map;
+        for (int i = 0; i < n; i++)
+        {
+            index_map[arr[i]] = i;
+        }
+        unordered_map<int, int> dp;
+        int ans = 0;
+        for (int j = 0; j < n; j++)
+        {
+            for (int i = 0; i < j; i++)
+            {
+                if (arr[j] - arr[i] < arr[i] && index_map.count(arr[j] - arr[i]))
+                {
+                    int k = index_map[arr[j] - arr[i]];
+                    dp[j*n + i] = dp[i*n + k] + 1;
+                    ans = max(dp[j*n+i] + 2, ans);
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+
+[**LeetCode 91. 解码方法**](https://leetcode-cn.com/problems/decode-ways/)
+
+- 思路: 分类讨论搞搞清
+
+- 代码
+
+```c++
+class Solution {
+public:
+    int numDecodings(string s) {
+        if (s[0] == '0') return 0;
+        int pre = 1, curr = 1;//dp[-1] = dp[0] = 1
+        for (int i = 1; i < s.size(); i++) {
+            int tmp = curr;
+            if (s[i] == '0')
+                if (s[i - 1] == '1' || s[i - 1] == '2') curr = pre;
+                else return 0;
+            else if (s[i - 1] == '1' || (s[i - 1] == '2' && s[i] >= '1' && s[i] <= '6'))
+                curr = curr + pre;
+            pre = tmp;
+        }
+        return curr;
     }
 };
 ```
