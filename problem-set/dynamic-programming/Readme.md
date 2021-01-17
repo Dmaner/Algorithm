@@ -125,7 +125,7 @@ public:
 };
 ```
 
-[**LeetCode 91. 解码方法**](https://leetcode-cn.com/problems/decode-ways/)
+[LeetCode 91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
 
 - 思路: 分类讨论搞搞清
 
@@ -151,10 +151,52 @@ public:
 };
 ```
 
+[LeetCode 813. 最大平均值和的分组](https://leetcode-cn.com/problems/largest-sum-of-averages/)
+
+- 代码
+  
+```c++
+class Solution {
+public:
+    double largestSumOfAverages(vector<int>& nums, int K) {
+        int n = nums.size();
+        vector<double> sum(n+1, 0);
+        vector<vector<double>> dp(n + 1, vector<double>(K+1, 0));
+
+        // presum
+        for (int i = 1; i <= n; i++) sum[i] = sum[i-1] + nums[i-1];
+        
+        // base case
+        for (int i = 1; i <= n; i++)
+        {
+            dp[i][1] = sum[i] / i;
+        }
+        
+        for (int i = 1; i <= n; i++)
+        {
+            for (int j = 2; j <= K; j++)
+            {
+                for (int k = j - 1; k < i; k++)
+                {
+                    dp[i][j] = max(dp[i][j], dp[k][j-1] + (sum[i] - sum[k]) / (i - k));
+                }
+            }
+        }
+        
+        return dp[n][K];
+    }
+};
+```
+
 ## 其他例题
 
-- [面试题 17.24 最大子矩阵](https://leetcode-cn.com/problems/max-submatrix-lcci/)
+- [LeetCode 面试题 17.24 最大子矩阵](https://leetcode-cn.com/problems/max-submatrix-lcci/)
 - LeetCode 打家劫舍
+- LeetCode 股票系列
+- [LeetCode 887 鸡蛋掉落](https://leetcode-cn.com/problems/super-egg-drop/)
+- [LeetCode 975 奇偶跳](https://leetcode-cn.com/problems/odd-even-jump/)
+- [LeetCode 403 青蛙过河](https://leetcode-cn.com/problems/frog-jump/)
+- [LeetCode 1478 安排邮筒](https://leetcode-cn.com/problems/allocate-mailboxes/)
 
 ## 拓展例题
 
