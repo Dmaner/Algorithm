@@ -188,15 +188,228 @@ public:
 };
 ```
 
+[LeetCode 10 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
+
+- 思路：写出dp方程
+
+```c++
+if s[i] == p[i] || p[i] == '.' :
+    dp[i][j] = dp[i-1][j-1]
+else if p[i] == '*':
+    if s[i] == p[i-1] || p[i-1] == '.' :
+        dp[i][j] = dp[i][j-2] || dp[i-1][j]
+    else 
+        dp[i][j] = dp[i][j-2]
+```
+
+- 代码：
+
+```c++
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int m = s.length();
+        int n = p.length();
+        bool dp[m+1][n+1];
+        dp[0][0] = true;
+
+        // base case
+        for (int i = 1; i <= m; i++) dp[i][0] = false;
+        for (int i = 1; i <= n; i++)
+        {
+            if (i >= 2 && p[i-1] == '*') dp[0][i] = dp[0][i-2];
+            else dp[0][i] = false;
+        }
+
+        for (int i = 1; i <= m; i++)
+        {
+            for (int j = 1; j <= n; j++)
+            {
+                if (p[j-1] == '.' || p[j-1] == s[i-1]) dp[i][j] = dp[i-1][j-1];
+                else if (p[j-1] == '*') 
+                {
+                    dp[i][j] = dp[i][j-2];
+                    if (s[i-1] == p[j-2] || p[j-2] == '.') dp[i][j] |= dp[i-1][j];
+                }
+                else dp[i][j] = false;
+            }
+        }
+        return dp[m][n];
+    }
+};
+```
+
+[LeetCode 174 地下城游戏](https://leetcode-cn.com/problems/dungeon-game/)
+
+- 思路：正向dp的话需要记录当前路径和以及当前路径最小值对然而对一个参数的优化会对另一个参数的优化产生影响，但反向dp就能很好解决这个问题
+
+- 代码：
+
+```c++
+class Solution {
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        int n = dungeon.size(), m = dungeon[0].size();
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, INT_MAX));
+        dp[n][m - 1] = dp[n - 1][m] = 1;
+        for (int i = n - 1; i >= 0; --i) {
+            for (int j = m - 1; j >= 0; --j) {
+                int minn = min(dp[i + 1][j], dp[i][j + 1]);
+                dp[i][j] = max(minn - dungeon[i][j], 1);
+            }
+        }
+        return dp[0][0];
+    }
+};
+```
+
+[LeetCode 1371 每个元音包含偶数次的最长子字符串](https://leetcode-cn.com/problems/find-the-longest-substring-containing-vowels-in-even-counts/)
+
+- 思路：前缀和+状态压缩
+- 代码：
+
+```c++
+class Solution {
+public:
+    int findTheLongestSubstring(string s) {
+        int ans = 0, status = 0, n = s.length();
+        vector<int> pos(1 << 5, -1);
+        pos[0] = 0;
+        for (int i = 0; i < n; ++i) {
+            if (s[i] == 'a') {
+                status ^= 1<<0;
+            } else if (s[i] == 'e') {
+                status ^= 1<<1;
+            } else if (s[i] == 'i') {
+                status ^= 1<<2;
+            } else if (s[i] == 'o') {
+                status ^= 1<<3;
+            } else if (s[i] == 'u') {
+                status ^= 1<<4;
+            }
+            if (~pos[status]) {
+                ans = max(ans, i + 1 - pos[status]);
+            } else {
+                pos[status] = i + 1;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+[LeetCode 523 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
+
+- 代码：
+
+```c++
+class Solution {
+public:
+// 转换为求sum=0的情况
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        map<int, int> mp;
+        mp[0] = -1;
+        int sum = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            sum += nums[i];
+            if (k != 0) sum %= k;
+            if (mp.find(sum) != mp.end()) {
+                if (i - mp[sum] > 1) return true; 
+            } else {
+                mp[sum] = i;
+            }
+        }
+        return false;
+    }
+};
+```
+
+[LeetCode 1447 找两个和为目标值且不重叠的子数组](https://leetcode-cn.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/)
+- 思路: 滑动窗口+dp保存状态
+
+- 代码
+```c++
+class Solution {
+public:
+    int minSumOfLengths(vector<int>& arr, int target) {
+        int n = arr.size();
+        int left = 0;
+        int right = 0;
+        int sum = 0;
+        int ans = INT_MAX;
+        // dp[i]表示区间[0,i-1]之间最短的和为target的子数组
+        // n + 1表示不存在
+        vector<int> dp(n + 1, 0);
+        dp[0] = n + 1; 
+
+        for (right = 0; right < n; right++) {
+            sum += arr[right];
+
+            while (sum > target) {
+                sum -= arr[left];
+                left++;
+            }
+
+            if (sum == target) {
+                // 区间[left,right]是一个和为target的子数组，该子数组长度为len
+                int len = right - left + 1;
+                ans = min(ans, len + dp[left]);
+                // 更新dp，取长度更小的一个
+                dp[right + 1] = min(dp[right], len);
+            } else {
+                dp[right + 1] = dp[right];
+            }
+        }
+
+        return ans > n ? -1 : ans;
+    }
+};
+```
+
+[LeetCode 370 区间加法](https://leetcode-cn.com/problems/range-addition/)
+
+- 思路：差分
+- 代码
+
+```c++
+class Solution {
+public:
+    vector<int> getModifiedArray(int length, vector<vector<int>>& updates) {
+        vector<int> ans(length);
+        for (auto& op : updates)
+        {
+            int start = op[0];
+            int end = op[1];
+            int inc = op[2];
+            ans[start] += inc;
+            if (end + 1 < length) ans[end+1] -= inc;
+        }
+
+        for (int i = 1; i < length; i++)
+        {
+            ans[i] += ans[i-1];
+        }
+        return ans;
+    }
+};
+```
+
+
 ## 其他例题
 
-- [LeetCode 面试题 17.24 最大子矩阵](https://leetcode-cn.com/problems/max-submatrix-lcci/)
 - LeetCode 打家劫舍
 - LeetCode 股票系列
+- [LeetCode 面试题 17.24 最大子矩阵](https://leetcode-cn.com/problems/max-submatrix-lcci/)
 - [LeetCode 887 鸡蛋掉落](https://leetcode-cn.com/problems/super-egg-drop/)
 - [LeetCode 975 奇偶跳](https://leetcode-cn.com/problems/odd-even-jump/)
 - [LeetCode 403 青蛙过河](https://leetcode-cn.com/problems/frog-jump/)
 - [LeetCode 1478 安排邮筒](https://leetcode-cn.com/problems/allocate-mailboxes/)
+- [LeetCode 87 扰乱字符串](https://leetcode-cn.com/problems/scramble-string/)
+- [LeetCode 650 只有两个键的键盘](https://leetcode-cn.com/problems/2-keys-keyboard/)
+- [LeetCode 974 和可被 K 整除的子数组](https://leetcode-cn.com/problems/subarray-sums-divisible-by-k/)
+- [LeetCode 1074 元素和为目标值的子矩阵数量](https://leetcode-cn.com/problems/number-of-submatrices-that-sum-to-target/)
+- [LeetCode 5 最长回文串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+
 
 ## 拓展例题
 
