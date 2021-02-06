@@ -220,10 +220,11 @@ public:
 };
 ```
 
-## 拓展例题
-
 ## 其他例题
 
-- leetcode 89 格雷码
-- leetcode 127 单词接龙
-- leetcode 528 优美的排列
+- [leetcode 89 格雷码](https://leetcode-cn.com/problems/gray-code/)
+- [leetcode 127 单词接龙](https://leetcode-cn.com/problems/word-ladder/)
+- [LeetCode 351 安卓系统手势解锁](https://leetcode-cn.com/problems/android-unlock-patterns/)
+- [LeetCode 638. 大礼包](https://leetcode-cn.com/problems/shopping-offers/)
+
+## 拓展例题

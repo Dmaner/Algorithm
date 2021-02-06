@@ -394,6 +394,193 @@ public:
 };
 ```
 
+[LeetCode 494 目标和](https://leetcode-cn.com/problems/target-sum/)
+
+- 思路 ： 01背包, 将加的数表示为left，减的数表示为right，数组总和为sum, 求target = left - right = left - (sum - left) = 2* left - sum -> (sum + target) / 2 = left
+- 代码
+
+```c++
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+        int sum = 0;
+        for (int i = 0; i < nums.size(); i++) sum += nums[i];
+        if (S > sum) return 0; // 此时没有方案
+        if ((S + sum) % 2 == 1) return 0; // 此时没有方案
+        int bagSize = (S + sum) / 2;
+        vector<int> dp(bagSize + 1, 0);
+        dp[0] = 1;
+        for (int i = 0; i < nums.size(); i++) {
+            for (int j = bagSize; j >= nums[i]; j--) {
+                dp[j] += dp[j - nums[i]];
+            }
+        }
+        return dp[bagSize];
+    }
+};
+```
+
+[LeetCode 464 我能赢吗](https://leetcode-cn.com/problems/can-i-win/)
+- 思路：回溯+状态压缩
+- 代码 
+
+```c++
+class Solution {
+public:
+    int dfs(int *dp, int m, int target, int state)
+    {
+        if (dp[state] >= 0) return dp[state];
+        for (int i = 1; i <= m; i++)
+        {
+            int num = 1 << (i -1);
+            if (state & num) continue;
+            if (target - i <= 0 || !dfs(dp, m, target - i, state | num)) return dp[state] = 1;
+        }      
+        return dp[state] = 0;
+    }
+    bool canIWin(int m, int target) {
+        if (m * (m + 1) < 2 * target) return false;
+        int dp[1 << (m + 1)];
+        memset(dp, -1, sizeof(dp));
+        return dfs(dp, m, target, 0) == 1;
+    }
+};
+```
+
+[LeetCode 847. 访问所有节点的最短路径](https://leetcode-cn.com/problems/shortest-path-visiting-all-nodes/)
+- 思路
+- 代码
+
+```c++
+class State {
+public:
+    int m_history;
+    int m_cur;
+    State(int history, int cur) : m_history(history), m_cur(cur) {}
+};
+class Solution {
+public:
+    int shortestPathLength(vector<vector<int>>& graph) {
+        int n = graph.size();
+        int end = (1 << n) - 1;
+        queue<State> nodes;
+        vector<vector<bool>> visited(1 << n, vector<bool>(n, false));
+        
+        // push all nodes;
+        for (int i = 0; i < n; i++)
+        {
+            nodes.push(State(1 << i, i));
+            visited[1 << i][i] = true;
+        }
+        
+        // bfs
+        int len = n;
+        int level = 0;
+        while (len)
+        {
+            level ++;
+            while (len --) {
+                State a = nodes.front();
+                nodes.pop();
+                for (int next : graph[a.m_cur])
+                {
+                    int v = a.m_history | (1 << next);
+                    if (v == end) return level;
+                    else {
+                        if (!visited[v][next]) 
+                        {
+                            visited[v][next] = true;
+                            nodes.push(State(v, next));
+                        }
+                    }
+                }
+            }
+            len = nodes.size();
+        }
+        return 0;
+    }
+};
+```
+
+[LeetCode 526. 优美的排列](https://leetcode-cn.com/problems/beautiful-arrangement/)
+
+- 思路 ：状态压缩
+- 代码
+
+```c++
+class Solution {
+ public:
+  int countArrangement(int n) {
+    vector<int> f(1 << n);
+    f[0] = 1;
+    for (int i = 0; i < 1 << n; i++) {
+      int pos = 0;
+      for (int j = 0; j < n; j++)
+        if (i >> j & 1) pos++;
+      for (int j = 0; j < n; j++)
+        if (!(i & (1 << j)) ) {
+          if ((pos + 1) % (j + 1) == 0 || (j + 1) % (pos + 1) == 0)
+            f[i | (1 << j)] += f[i];
+        }
+    }
+    return f[(1 << n) - 1];
+  }
+};
+```
+
+[LeetCode 691 贴纸拼词](https://leetcode-cn.com/problems/stickers-to-spell-word/)
+
+- 代码 ：
+
+```c++
+class Solution {
+public:
+    int minStickers(vector<string>& stickers, string target) {
+        int m = stickers.size();
+        vector<vector<int>> arr(m, vector<int>(26, 0));
+        vector<vector<int>> contain(26);
+        for (int i = 0; i < m; i++) {
+            string sticker = stickers[i];
+            for (auto& c: sticker) {
+                int idx = c - 'a';
+                arr[i][idx]++;
+                if (contain[idx].empty() || contain[idx].back() != i) {
+                    contain[idx].emplace_back(i); //contain数组保存了哪些单词包含这个字母
+                }
+            }
+        }
+        int n = target.size();
+        vector<int> dp(1 << n, INT_MAX);
+        dp[0] = 0;
+        for (int i = 0; i < (1 << n) - 1; i++) { //为什么条件是(1 << n) - 1???不要取全1
+            if (dp[i] == INT_MAX) continue;
+            int idx;
+            for (int j = 0; j < n; j++) {
+                if (!(i & (1 << j))) { //i状态中不包含j位，break的用处是？
+                //因为有contain数组，所以后面实际上是去找其中的一个子集
+                    idx = j;
+                    break;
+                }
+            }
+            idx = target[idx] - 'a';
+            for (int j: contain[idx]) {
+                vector<int> tmp(arr[j]); //临时的拷贝了一份
+                int next = i;
+                for (int k = 0; k < n; k++) {
+                    if (next & (1 << k)) continue; //next状态中已包含第k位对应的字母
+                    char ch = target[k];
+                    if (tmp[ch-'a'] > 0) { //处理重复的字符
+                        next |= (1 << k);
+                        tmp[ch-'a']--;
+                    }
+                }
+                dp[next] = min(dp[next], dp[i] + 1);
+            }
+        }
+        return dp[(1 << n) - 1] == INT_MAX ? -1 : dp[(1 << n) - 1];
+    }
+};
+```
 
 ## 其他例题
 
@@ -409,6 +596,8 @@ public:
 - [LeetCode 974 和可被 K 整除的子数组](https://leetcode-cn.com/problems/subarray-sums-divisible-by-k/)
 - [LeetCode 1074 元素和为目标值的子矩阵数量](https://leetcode-cn.com/problems/number-of-submatrices-that-sum-to-target/)
 - [LeetCode 5 最长回文串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+- [LeetCode 474 一和零](https://leetcode-cn.com/problems/ones-and-zeroes/)
+- [LeetCode 879 盈利计划](https://leetcode-cn.com/problems/profitable-schemes/) 
 
 
 ## 拓展例题
