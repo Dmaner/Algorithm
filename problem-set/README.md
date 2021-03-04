@@ -12,3 +12,4 @@
 - [Divide & Conquer](./divide&conquer)
 - [Stack](./stack)
 - [并查集](./disjoint-set)
+- [贪心](./greedy/Readme.md)
