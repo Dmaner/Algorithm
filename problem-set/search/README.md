@@ -14,10 +14,76 @@ int mySqrt(int a) {
 }
 ```
 
-**leetcode 51 N皇后**
+LeetCode 81 搜索旋转排序数组
 
-- 问题描述
-> n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击，给定一个整数 n，返回所有不同的 n 皇后问题的解决方案
+- 二分
+
+```c++
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        int n = nums.size();
+        int left = 0;
+        int right = n - 1;
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target)
+            {
+                return true;
+            }
+            if (nums[mid] == nums[left])
+            {
+                left ++;
+            }
+            else if (nums[mid] <= nums[right])
+            {
+                if (target > nums[mid] && target <= nums[right])
+                {
+                    left = mid + 1;
+                }
+                else right = mid - 1;
+            }
+            else 
+            {
+                if (target < nums[mid] && target >= nums[left])
+                {
+                    right = mid - 1;
+                }
+                else left = mid + 1;
+            }
+        }
+        return false;
+    }
+};
+```
+
+LeetCode 154 寻找旋转排序数组中的最小值 II
+
+```c++
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int low = 0;
+        int high = nums.size() - 1;
+        while (low < high) {
+            int pivot = low + (high - low) / 2;
+            if (nums[pivot] < nums[high]) {
+                high = pivot;
+            }
+            else if (nums[pivot] > nums[high]) {
+                low = pivot + 1;
+            }
+            else {
+                high -= 1;
+            }
+        }
+        return nums[low];
+    }
+};
+```
+
+leetcode 51 N皇后
 
 - 代码
 ```c++
@@ -238,5 +304,6 @@ public:
 - [leetcode 127 单词接龙](https://leetcode-cn.com/problems/word-ladder/)
 - [LeetCode 351 安卓系统手势解锁](https://leetcode-cn.com/problems/android-unlock-patterns/)
 - [LeetCode 638. 大礼包](https://leetcode-cn.com/problems/shopping-offers/)
+- [LeetCode 240](https://leetcode-cn.com/problems/search-a-2d-matrix-ii/)
 
 ## 拓展例题
