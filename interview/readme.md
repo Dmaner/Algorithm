@@ -11,6 +11,12 @@
 - 最小生成树
 - 拓扑排序
 - 并查集
+- mmap
+- mmu
+- 共享内存
+- 系统调用
+- 进程内存布局
+- 进程初始化
 
 ## 
 
@@ -45,6 +51,54 @@ public:
             }
         }
         return NULL;
+    }
+};
+```
+
+LeetCode 114 二叉树展开为链表
+
+```c++
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        TreeNode *curr = root;
+        while (curr != nullptr) {
+            if (curr->left != nullptr) {
+                auto next = curr->left;
+                auto predecessor = next;
+                while (predecessor->right != nullptr) {
+                    predecessor = predecessor->right;
+                }
+                predecessor->right = curr->right;
+                curr->left = nullptr;
+                curr->right = next;
+            }
+            curr = curr->right;
+        }
+    }
+};
+```
+
+```c++
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        if(!root)return;
+        flatten(root->left);
+        flatten(root->right);
+    TreeNode* left = root->left;
+    TreeNode *right = root->right;
+
+    // 2、将左子树作为右子树
+    root->left = nullptr;
+    root->right = left;
+
+    // 3、将原先的右子树接到当前右子树的末端
+    TreeNode* p = root;
+    while (p->right != nullptr) {
+        p = p->right;
+    }
+    p->right = right;
     }
 };
 ```

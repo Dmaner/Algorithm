@@ -1,6 +1,109 @@
 # 并查集
 
+## 并查集
+
 ## 经典例题
+
+LeetCode 547 省份数量
+
+```c++
+class uf {
+    public:
+        vector<int> m_parent;
+        vector<int> m_size;
+        int m_count;
+        uf(int n) : m_parent(n), m_count(n), m_size(n, 1)
+        {
+            iota(m_parent.begin(), m_parent.end(), 0);
+        } 
+        
+        int find(int x)
+        {
+            return x == m_parent[x] ? x : m_parent[x] = find(m_parent[x]);
+        }
+
+        bool unite(int x, int y)
+        {
+            x = find(x);
+            y = find(y);
+            if (x == y) return false;
+            if (m_size[x] < m_size[y])
+            {
+                swap(x, y);
+            }
+            m_parent[y] = x;
+            m_size[x] += m_size[y];
+            m_count --;
+            return true;
+        }
+};
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n = isConnected.size();
+        uf a(n);
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                if (isConnected[i][j])
+                {
+                    a.unite(i, j);
+                }
+            }
+        }
+        return a.m_count;
+    }
+};
+```
+
+LeetCode 684 冗余连接
+
+```c++
+class uf {
+public:
+    vector<int> parent;
+    vector<int> size;
+    int count;
+    uf(int n) : parent(n), size(n, 1), count(n) {
+        iota(parent.begin(), parent.end(), 0);
+    }
+    int find(int x)
+    {
+        return parent[x] == x ? x : parent[x] = find(parent[x]);
+    }
+    void unite(int x, int y)
+    {
+        x = find(x);
+        y = find(y);
+        if (x == y) return;
+        if (size[x] < size[y]) swap(x, y);
+        parent[y] = x;
+        size[x] += size[y];
+        count --;
+    }
+    bool isconnected(int x, int y)
+    {
+        return find(x) == find(y);
+    }
+};
+
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int n = edges.size();
+        uf u(n);
+        for (auto & edge : edges)
+        {
+            int x = edge[0] - 1;
+            int y = edge[1] - 1;
+            if (u.isconnected(x, y)) return edge;
+            else u.unite(x, y);
+        }
+        return vector<int>();
+    }
+};
+```
 
 [**Leetcode 1202**](https://leetcode-cn.com/problems/smallest-string-with-swaps/)
 
@@ -113,3 +216,7 @@ public:
 ```
 
 ```
+
+## 其他例题
+
+- LeetCode 399 除法求值
