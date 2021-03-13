@@ -1,10 +1,14 @@
 # 并查集
 
-## 并查集
+## 使用思路
+
+- 联通分量个数
+- 冗余连接
+- 棋盘类，得到联通性
 
 ## 经典例题
 
-LeetCode 547 省份数量
+[LeetCode 547 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
 
 ```c++
 class uf {

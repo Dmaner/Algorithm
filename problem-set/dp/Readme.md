@@ -1,5 +1,11 @@
 # 动态规划
 
+动态规划系列模板和例题
+
+## 经典模板
+
+-  01背包
+
 ## 经典例题
 
 [LeetCode 354.俄罗斯套娃信封问题](https://leetcode-cn.com/problems/russian-doll-envelopes/)
@@ -582,11 +588,84 @@ public:
 };
 ```
 
-LeetCode 879 盈利计划
+### 树形DP
+
+[Leetcode 337 打家劫舍iii](https://leetcode-cn.com/problems/house-robber-iii/)
 
 ```c++
-
+class Solution {
+public:
+    vector<int> dfs(TreeNode* root)
+    {
+        if (!root) return {0, 0};
+        else 
+        {
+            vector<int> ans(2);
+            vector<int> left = dfs(root->left);
+            vector<int> right = dfs(root->right);
+            // 0 劫 1 不劫
+            ans[1] = max(left[0], left[1]) + max(right[0], right[1]);
+            ans[0] = left[1] + right[1] + root->val;
+            return ans;
+        }
+    }
+    int rob(TreeNode* root) {
+        vector<int> ans = dfs(root);
+        return max(ans[0], ans[1]);
+    }
+};
 ```
+
+[洛谷 P1352](https://www.luogu.com.cn/problem/P1352)
+
+```c++
+#include <bits/stdc++.h>
+#include <iostream>
+
+using namespace std;
+const int MAXN = 1e5 + 5;
+vector<vector<int>> graph(MAXN);
+// dp[i][0] 表示以i为根的树结构，0表示根节点不取，1节点取
+vector<vector<int>> dp(MAXN, vector<int>(2));
+vector<int> values(MAXN);
+
+void dfs(int x, int fa)
+{
+    dp[x][0] = 0;
+    dp[x][1] = values[x];
+    for (auto next : graph[x])
+    {
+        if (next != fa)
+        {
+            dfs(next, x);
+            dp[x][0] += max(dp[next][1], dp[next][0]);
+            dp[x][1] += dp[next][0];
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> values[i + 1];
+    }
+    int u, v;
+    while (cin >> u >> v)
+    {
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+    dfs(1, -1);
+    int ans = max(dp[1][0], dp[1][1]);
+    cout << ans << endl;
+    return 0;
+}
+```
+
+
 
 ## 其他例题
 

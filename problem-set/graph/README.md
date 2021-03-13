@@ -1,10 +1,16 @@
 # 图
 
-### 经典例题
+## 经典算法
+
+- [最短路径](#)
+
+
+
+## 经典例题
 
 - 拓扑排序
 
-LeetCode 210 课程表
+#### LeetCode 210 课程表
 
 ```c++
 class Solution {
@@ -40,7 +46,7 @@ public:
 };
 ```
 
-LeetCode 1203 项目管理
+#### LeetCode 1203 项目管理
 
 ```c++
 class Solution
@@ -155,7 +161,9 @@ class Solution
 
 - 最短路径
 
-LeetCode 743 网络延迟时间
+#### LeetCode 743 网络延迟时间
+
+- dijkstra算法
 
 ```c++
 class Node
@@ -216,6 +224,38 @@ public:
         for (int i = 1; i <= n; i++) ans = max(ans, dist[i]);
 
         return ans == INF ? -1 : ans;
+    }
+};
+```
+
+- floyd算法
+
+```c++
+class Solution
+{
+  public:
+    int networkDelayTime(vector<vector<int>> &times, int n, int k)
+    {
+        const int inf = 0x3f3f3f3f;
+        vector<vector<int>> dp(n + 1, vector<int>(n + 1, inf));
+        for (auto &it : times)
+            dp[it[0]][it[1]] = it[2];
+        for (int i = 1; i <= n; i++)
+            dp[i][i] = 0; //自己到自己为0
+        for (int k = 1; k <= n; k++)
+        {
+            for (int i = 1; i <= n; i++)
+            {
+                for (int j = 1; j <= n; j++)
+                {
+                    dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j]);
+                }
+            }
+        }
+        int ret = 0;
+        for (int i = 1; i <= n; i++)
+            ret = max(ret, dp[k][i]);
+        return ret == inf ? -1 : ret;
     }
 };
 ```

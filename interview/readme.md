@@ -103,6 +103,77 @@ public:
 };
 ```
 
+美团面试题：大意为求滑动窗口的众数
+
+```c++
+/*
+ * 思路：构建优先队列，将根据<数出现的次数，数大小>排序
+ */
+#include <bits/stdc++.h>
+#include <iostream>
+
+using namespace std;
+
+class Node
+{
+  public:
+    int val;
+    int freq;
+    Node(int v, int f) : val(v), freq(f)
+    {
+    }
+    friend bool operator<(const Node &lhs, const Node &rhs)
+    {
+        if (lhs.freq == rhs.freq)
+            return lhs.val > rhs.val;
+        else
+            return lhs.freq < rhs.freq;
+    }
+};
+
+int main(int argc, char const *argv[])
+{
+    int n, k;
+    cin >> n >> k;
+    vector<int> nums(n);
+    priority_queue<Node> que;
+    unordered_map<int, int> m;
+
+    // init
+    for (int i = 0; i < n; i++)
+    {
+        cin >> nums[i];
+        if (i < k)
+        {
+            que.push(Node(nums[i], ++m[nums[i]]));
+        }
+    }
+    cout << que.top().val << endl;
+
+    int index = k;
+    while (index < n)
+    {
+        m[nums[index - k]]--;
+        m[nums[index]]++;
+        que.push(Node(nums[index], m[nums[index]]));
+        while (!que.empty())
+        {
+            Node node = que.top();
+            // 如果当前节点的频率和当前哈希表记录的哈希值不一样说明是历史节点，则弹出
+            if (node.freq != m[node.val])
+            {
+                que.pop();
+            }
+            else
+                break;
+        }
+        cout << que.top().val << endl;
+        index++;
+    }
+    return 0;
+}
+```
+
 LeetCode 440 字典序的第K小数字
 
 ```c++
