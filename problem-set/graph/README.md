@@ -260,11 +260,7 @@ class Solution
 };
 ```
 
-LeetCode 332 重新安排行程
 
-```c++
-
-```
 
 ## 其他例题
 
