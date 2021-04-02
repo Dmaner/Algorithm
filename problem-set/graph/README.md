@@ -8,7 +8,7 @@
 
 ## 经典例题
 
-- 拓扑排序
+### 拓扑排序
 
 #### LeetCode 210 课程表
 
@@ -159,7 +159,7 @@ class Solution
 };
 ```
 
-- 最短路径
+### 最短路径
 
 #### LeetCode 743 网络延迟时间
 
@@ -256,6 +256,119 @@ class Solution
         for (int i = 1; i <= n; i++)
             ret = max(ret, dp[k][i]);
         return ret == inf ? -1 : ret;
+    }
+};
+```
+
+### 最小生成树
+
+#### [LeetCode 1135. 最低成本联通所有城市](https://leetcode-cn.com/problems/connecting-cities-with-minimum-cost/)
+
+- 代码 : Kruskal 算法
+
+```c++
+class Solution
+{
+  private:
+    vector<int> f, sz;
+
+  public:
+    int find(int x)
+    {
+        return f[x] == x ? x : f[x] = find(f[x]);
+    }
+    void unite(int x, int y)
+    {
+        x = find(x);
+        y = find(y);
+        if (x == y)
+            return;
+        if (sz[x] < sz[y])
+            swap(x, y);
+        f[y] = x;
+        sz[x] += sz[y];
+    }
+    bool ifconnected(int x, int y)
+    {
+        return find(x) == find(y);
+    }
+    int minimumCost(int N, vector<vector<int>> &connections)
+    {
+        sz = vector<int>(N+1, 1);
+        f = vector<int>(N+1);
+        iota(f.begin(), f.end(), 0);
+        auto cmp = [](vector<int> &a, vector<int> &b) { return a[2] < b[2]; };
+        sort(connections.begin(), connections.end(), cmp);
+        int cost = 0;
+        for (auto conn : connections)
+        {
+            if (!ifconnected(conn[0], conn[1]))
+            {
+                unite(conn[0], conn[1]);
+                cost += conn[2];
+                N--;
+            }
+            if (N == 1) break;
+        }
+        return N != 1 ? -1 : cost;
+    }
+};
+```
+
+- 代码 ：prim算法
+
+```c++
+class Solution {
+public:
+    int minimumCost(int N, vector<vector<int>>& connections) {
+        int E = connections.size();
+        if (E < N - 1) {
+            return -1; // minimum spanning tree need at least N - 1 edges
+        }
+
+        vector<vector<pair<int, int>>> graph(N + 1, vector<pair<int, int>>());
+        // Construct the adjacent graph
+        for (const auto& e : connections) { // loop each edge e
+            graph[e[0]].push_back(make_pair(e[1], e[2]));
+            graph[e[1]].push_back(make_pair(e[0], e[2]));
+        }
+
+        if (graph[1].empty()) {
+            return -1;
+        }
+
+        auto cmp = [](auto& a, auto& b) {
+             return a.second > b.second;
+        };
+        priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> pq(cmp);
+        vector<bool> visited(N + 1, false);
+
+        visited[1] = true;
+        int selected = 0; // number of edges selected in MST
+        // Choose 1 as the starting vertex
+        for (const auto& e : graph[1]) {
+            pq.push(e);
+        }
+
+        int res = 0;
+        while (!pq.empty()) {
+            auto cur = pq.top(); pq.pop();
+            if (visited[cur.first]) {
+                continue;
+            }
+            visited[cur.first] = true;
+            res += cur.second;
+            selected++;
+            if (selected == N - 1) {
+                return res;
+            }
+
+            for (auto& neighbor : graph[cur.first]) {
+                pq.push({neighbor.first, neighbor.second});
+            }
+        }
+
+        return -1;
     }
 };
 ```

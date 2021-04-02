@@ -14,7 +14,7 @@ int mySqrt(int a) {
 }
 ```
 
-LeetCode 81 搜索旋转排序数组
+[LeetCode 81 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array-ii/)
 
 - 二分
 
@@ -23,62 +23,59 @@ class Solution {
 public:
     bool search(vector<int>& nums, int target) {
         int n = nums.size();
-        int left = 0;
-        int right = n - 1;
-        while (left <= right)
+        int l = 0;
+        int r = n - 1;
+        while (l < r)
         {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] == target)
+            int m = l + (r - l) / 2;
+            if (nums[m] == target) return true;
+            if (nums[r] == nums[m]) r--;
+            else if (nums[m] > nums[r]) 
             {
-                return true;
-            }
-            if (nums[mid] == nums[left])
-            {
-                left ++;
-            }
-            else if (nums[mid] <= nums[right])
-            {
-                if (target > nums[mid] && target <= nums[right])
+                if (nums[m] > target && target >= nums[l])
                 {
-                    left = mid + 1;
+                    r = m;
                 }
-                else right = mid - 1;
+                else l = m + 1;
             }
             else 
             {
-                if (target < nums[mid] && target >= nums[left])
+                if (nums[m] < target && target <= nums[r])
                 {
-                    right = mid - 1;
+                    l = m + 1;
                 }
-                else left = mid + 1;
+                else r = m;
             }
         }
-        return false;
+        return nums[l] == target;
     }
 };
 ```
 
-LeetCode 154 寻找旋转排序数组中的最小值 II
+[LeetCode 154 寻找旋转排序数组中的最小值 II](https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array-ii/)
 
 ```c++
 class Solution {
 public:
-    int findMin(vector<int>& nums) {
-        int low = 0;
-        int high = nums.size() - 1;
-        while (low < high) {
-            int pivot = low + (high - low) / 2;
-            if (nums[pivot] < nums[high]) {
-                high = pivot;
+    int findMin(vector<int>& numbers) {
+        int n = numbers.size();
+        int l = 0;
+        int r = n - 1;
+        while (l < r)
+        {
+            if (numbers[l] < numbers[r]) return numbers[l];
+            int mid = l + (r - l) / 2;
+            if (numbers[l] < numbers[mid])
+            {
+                l = mid + 1;
             }
-            else if (nums[pivot] > nums[high]) {
-                low = pivot + 1;
+            else if (numbers[l] > numbers[mid])
+            {
+                r = mid;
             }
-            else {
-                high -= 1;
-            }
+            else l ++;
         }
-        return nums[low];
+        return numbers[l];
     }
 };
 ```

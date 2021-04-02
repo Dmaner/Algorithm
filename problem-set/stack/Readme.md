@@ -1,11 +1,8 @@
 # 栈
 
-## 经典算法
-
-[单调栈](https://zhuanlan.zhihu.com/p/61423849)
-
-
 ## 经典例题
+
+### 单调栈
 
 LeetCode 239 滑动窗口最大值
 
@@ -112,3 +109,7 @@ public:
     }
 };
 ```
+
+## 经典例题
+
+- [456. 132 模式](https://leetcode-cn.com/problems/132-pattern/)
