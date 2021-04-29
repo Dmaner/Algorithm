@@ -8,7 +8,9 @@
 
 ## 经典例题
 
-[LeetCode 354.俄罗斯套娃信封问题](https://leetcode-cn.com/problems/russian-doll-envelopes/)
+### 线性动态规划
+
+#### [LeetCode 354.俄罗斯套娃信封问题](https://leetcode-cn.com/problems/russian-doll-envelopes/)
 
 - 思路
 
@@ -52,7 +54,7 @@ public:
 };
 ```
 
-[LeetCode 918 环形子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-circular-subarray/)
+#### [LeetCode 918 环形子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-circular-subarray/)
 
 - 题意
 
@@ -92,7 +94,7 @@ public:
 };
 ```
 
-[LeetCode 873 最长的斐波那契子序列的长度](https://leetcode-cn.com/problems/length-of-longest-fibonacci-subsequence/)
+#### [LeetCode 873 最长的斐波那契子序列的长度](https://leetcode-cn.com/problems/length-of-longest-fibonacci-subsequence/)
 
 - 思路
 
@@ -131,7 +133,7 @@ public:
 };
 ```
 
-[LeetCode 91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
+#### [LeetCode 91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
 
 - 思路: 分类讨论搞搞清
 
@@ -157,7 +159,7 @@ public:
 };
 ```
 
-[LeetCode 813. 最大平均值和的分组](https://leetcode-cn.com/problems/largest-sum-of-averages/)
+#### [LeetCode 813. 最大平均值和的分组](https://leetcode-cn.com/problems/largest-sum-of-averages/)
 
 - 代码
   
@@ -194,7 +196,7 @@ public:
 };
 ```
 
-[LeetCode 10 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
+#### [LeetCode 10 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
 
 - 思路：写出dp方程
 
@@ -245,7 +247,9 @@ public:
 };
 ```
 
-[LeetCode 174 地下城游戏](https://leetcode-cn.com/problems/dungeon-game/)
+### 逆向DP
+
+#### [LeetCode 174 地下城游戏](https://leetcode-cn.com/problems/dungeon-game/)
 
 - 思路：正向dp的话需要记录当前路径和以及当前路径最小值对然而对一个参数的优化会对另一个参数的优化产生影响，但反向dp就能很好解决这个问题
 
@@ -269,10 +273,12 @@ public:
 };
 ```
 
-[LeetCode 1371 每个元音包含偶数次的最长子字符串](https://leetcode-cn.com/problems/find-the-longest-substring-containing-vowels-in-even-counts/)
+### 前缀和
+
+#### [LeetCode 1371 每个元音包含偶数次的最长子字符串](https://leetcode-cn.com/problems/find-the-longest-substring-containing-vowels-in-even-counts/)
 
 - 思路：前缀和+状态压缩
-- 代码：
+- 代码：前缀和
 
 ```c++
 class Solution {
@@ -304,7 +310,7 @@ public:
 };
 ```
 
-[LeetCode 523 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
+#### [LeetCode 523 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
 
 - 代码：
 
@@ -330,7 +336,8 @@ public:
 };
 ```
 
-[LeetCode 1447 找两个和为目标值且不重叠的子数组](https://leetcode-cn.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/)
+#### [LeetCode 1447 找两个和为目标值且不重叠的子数组](https://leetcode-cn.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/)
+
 - 思路: 滑动窗口+dp保存状态
 
 - 代码
@@ -372,7 +379,9 @@ public:
 };
 ```
 
-[LeetCode 370 区间加法](https://leetcode-cn.com/problems/range-addition/)
+### 差分
+
+#### [LeetCode 370 区间加法](https://leetcode-cn.com/problems/range-addition/)
 
 - 思路：差分
 - 代码
@@ -400,7 +409,9 @@ public:
 };
 ```
 
-[LeetCode 494 目标和](https://leetcode-cn.com/problems/target-sum/)
+### 背包DP
+
+#### [LeetCode 494 目标和](https://leetcode-cn.com/problems/target-sum/)
 
 - 思路 ： 01背包, 将加的数表示为left，减的数表示为right，数组总和为sum, 求target = left - right = left - (sum - left) = 2* left - sum -> (sum + target) / 2 = left
 - 代码
@@ -426,7 +437,10 @@ public:
 };
 ```
 
-[LeetCode 464 我能赢吗](https://leetcode-cn.com/problems/can-i-win/)
+### 状压DP
+
+#### [LeetCode 464 我能赢吗](https://leetcode-cn.com/problems/can-i-win/)
+
 - 思路：回溯+状态压缩
 - 代码 
 
@@ -453,7 +467,8 @@ public:
 };
 ```
 
-[LeetCode 847. 访问所有节点的最短路径](https://leetcode-cn.com/problems/shortest-path-visiting-all-nodes/)
+#### [LeetCode 847. 访问所有节点的最短路径](https://leetcode-cn.com/problems/shortest-path-visiting-all-nodes/)
+
 - 思路
 - 代码
 
@@ -508,7 +523,7 @@ public:
 };
 ```
 
-[LeetCode 526. 优美的排列](https://leetcode-cn.com/problems/beautiful-arrangement/)
+#### [LeetCode 526. 优美的排列](https://leetcode-cn.com/problems/beautiful-arrangement/)
 
 - 思路 ：状态压缩
 - 代码
@@ -534,7 +549,7 @@ class Solution {
 };
 ```
 
-[LeetCode 691 贴纸拼词](https://leetcode-cn.com/problems/stickers-to-spell-word/)
+#### [LeetCode 691 贴纸拼词](https://leetcode-cn.com/problems/stickers-to-spell-word/)
 
 - 代码 ：
 
@@ -590,7 +605,7 @@ public:
 
 ### 树形DP
 
-[Leetcode 337 打家劫舍iii](https://leetcode-cn.com/problems/house-robber-iii/)
+#### [Leetcode 337 打家劫舍iii](https://leetcode-cn.com/problems/house-robber-iii/)
 
 ```c++
 class Solution {
@@ -616,7 +631,7 @@ public:
 };
 ```
 
-[洛谷 P1352](https://www.luogu.com.cn/problem/P1352)
+#### [洛谷 P1352](https://www.luogu.com.cn/problem/P1352)
 
 ```c++
 #include <bits/stdc++.h>

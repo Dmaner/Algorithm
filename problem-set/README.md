@@ -13,4 +13,5 @@
 - [栈](./stack)
 - [并查集](./disjoint-set)
 - [贪心](./greedy)
+- [面试高频](./etc)
 
